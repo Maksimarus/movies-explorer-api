@@ -48,6 +48,6 @@ export const movieValidator = celebrate({
     }),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    movieId: Joi.string().required(),
+    movieId: Joi.number().required(),
   }),
 });

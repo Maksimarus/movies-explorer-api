@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import { Conflict, BadRequest } from '../errors/index.js';
 import { SECRET_KEY } from '../env.js';
+import { userErrorMessages, authSuccessMessage, logoutMessage } from '../constants/RespMessages.js';
 
 export const register = async (req, res, next) => {
   const {
@@ -21,9 +22,9 @@ export const register = async (req, res, next) => {
     });
   } catch (err) {
     if (err.code === 11000) {
-      next(new Conflict('Пользователь с таким email уже существует'));
+      next(new Conflict(userErrorMessages.conflict));
     } else if (err.name === 'ValidationError') {
-      next(new BadRequest('Введены некорректные данные пользователя'));
+      next(new BadRequest(userErrorMessages.badRequest));
     } else {
       next(err);
     }
@@ -41,7 +42,7 @@ export const login = async (req, res, next) => {
       secure: true,
       sameSite: false,
     });
-    res.send({ message: 'Вы успешно авторизованы' });
+    res.send({ message: authSuccessMessage });
   } catch (err) {
     next(err);
   }
@@ -49,7 +50,7 @@ export const login = async (req, res, next) => {
 
 export const logout = (req, res, next) => {
   try {
-    res.clearCookie('jwt').send({ message: 'Вы вышли из системы' });
+    res.clearCookie('jwt').send({ message: logoutMessage });
   } catch (err) {
     next(err);
   }
