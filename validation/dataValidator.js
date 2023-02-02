@@ -40,7 +40,7 @@ export const movieValidator = celebrate({
     image: Joi.string().required().pattern(regExpForLink).messages({
       'string.pattern.base': 'Укажите ссылку',
     }),
-    trailer: Joi.string().required().pattern(regExpForLink).messages({
+    trailerLink: Joi.string().required().pattern(regExpForLink).messages({
       'string.pattern.base': 'Укажите ссылку',
     }),
     thumbnail: Joi.string().required().pattern(regExpForLink).messages({
