@@ -1,5 +1,5 @@
 import User from '../models/user.js';
-import { NotFound, BadRequest } from '../errors/index.js';
+import { NotFound, BadRequest, Conflict } from '../errors/index.js';
 import { userErrorMessages } from '../constants/RespMessages.js';
 
 export const getUser = async (req, res, next) => {
@@ -17,6 +17,10 @@ export const getUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   const { name, email } = req.body;
   try {
+    const foundedUser = await User.findOne({ email });
+    if (foundedUser) {
+      throw new Conflict(userErrorMessages.conflict);
+    }
     const user = await User.findByIdAndUpdate(req.user._id, { name, email }, {
       new: true,
       runValidators: true,
