@@ -18,7 +18,7 @@ export const updateUser = async (req, res, next) => {
   const { name, email } = req.body;
   try {
     const foundedUser = await User.findOne({ email });
-    if (foundedUser) {
+    if (foundedUser && req.user._id !== foundedUser._id.toString()) {
       throw new Conflict(userErrorMessages.conflict);
     }
     const user = await User.findByIdAndUpdate(req.user._id, { name, email }, {
